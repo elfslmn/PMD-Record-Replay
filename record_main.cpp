@@ -176,6 +176,7 @@ int main (int argc, char *argv[])
 
     int currentKey = 0;
     bool isCapturing;
+    string folder = "record";
 
     while (currentKey != 27)
     {
@@ -199,11 +200,18 @@ int main (int argc, char *argv[])
         	 
     	}
     	if(currentKey == 'r'){
-    		if(listener.isRecording)  listener.stopRecord();
+    		if(listener.isRecording) 
+    		{
+    			listener.stopRecord();
+				ofstream file;
+			 	file.open (folder+"/Specs.txt");
+			  	file << "Exposure time: " ;
+			  	if(result.count("e")) file << result["e"].as<int>() << endl;
+			  	else file << "Auto" << endl;
+			  	file.close();
+    		}
     		else
     		{
-    			
-    			string folder = "record";
     			if (result.count("f")) folder = result["f"].as<std::string>();
     			const int dir_err = system(("mkdir -p "+folder).c_str());
 				if (dir_err < 0) printf("Error creating directory\n");
