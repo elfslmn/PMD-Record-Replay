@@ -3,4 +3,7 @@ CMakeFiles/*
 Makefile
 cmake_install.cmake
 retro_plane
-record*
+record1/
+record2/
+record
+replay
