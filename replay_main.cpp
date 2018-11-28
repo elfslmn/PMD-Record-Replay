@@ -10,6 +10,18 @@ using namespace royale;
 using namespace std;
 using namespace cv;
 
+CamListener listener;
+
+static void onMouse( int event, int x, int y, int, void* )
+{
+    if( event != EVENT_LBUTTONDOWN )
+        return;
+    Vec3f point = listener.xyzMap.at<Vec3f>(y, x);
+    uint8_t confidence = listener.confMap.at<uint8_t>(y,x);
+	printf("Depth point(cm): x=%.2f\ty=%.2f\tz=%.2f\t Confidence=%.2f\n", 
+			point[0]*100, point[1]*100, point[2]*100, (float)confidence*100/255 );
+}
+
 
 int main (int argc, char *argv[])
 {
@@ -46,11 +58,12 @@ int main (int argc, char *argv[])
 	}
 	sort(file_names.begin(), file_names.end());
 
-	CamListener listener;
 	listener.initialize(224, 171);
 
+	// windows
 	namedWindow ("Gray", WINDOW_AUTOSIZE);
 	namedWindow ("Depth", WINDOW_AUTOSIZE);
+	setMouseCallback( "Depth", onMouse, 0 );
 
 	string path;
 	bool stop = false;
@@ -60,6 +73,7 @@ int main (int argc, char *argv[])
 
 		fs2["grayImage"] >> listener.grayImage;
 		fs2["xyzMap"] >> listener.xyzMap;
+		fs2["confMap"] >> listener.confMap;
 		listener.processImages();
 
 		int currentKey = waitKey (100) & 255;

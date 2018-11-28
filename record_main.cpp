@@ -9,8 +9,20 @@ using namespace royale;
 using namespace std;
 using namespace cv;
 
+
+CamListener listener;
 // this represents the main camera device object
 static std::unique_ptr<ICameraDevice> cameraDevice;
+
+static void onMouse( int event, int x, int y, int, void* )
+{
+    if( event != EVENT_LBUTTONDOWN )
+        return;
+    Vec3f point = listener.xyzMap.at<Vec3f>(y, x);
+    uint8_t confidence = listener.confMap.at<uint8_t>(y,x);
+	printf("Depth point(cm): x=%.2f\ty=%.2f\tz=%.2f\t Confidence=%.2f\n", 
+			point[0]*100, point[1]*100, point[2]*100, (float)confidence*100/255);
+}
 
 int main (int argc, char *argv[])
 {
@@ -30,8 +42,6 @@ int main (int argc, char *argv[])
 	
 	auto result = options.parse(argc, argv);
 	
-    CamListener listener;
-    std::unique_ptr<ICameraDevice> cameraDevice;
     {
         CameraManager manager;
 
@@ -162,9 +172,11 @@ int main (int argc, char *argv[])
         cerr << "Error registering data listener" << endl;
         return 1;
     }
-
+    
+    //windows
     namedWindow ("Gray", WINDOW_AUTOSIZE);
     namedWindow ("Depth", WINDOW_AUTOSIZE);
+    setMouseCallback( "Depth", onMouse, 0 );
 
     // start capture mode
     if (cameraDevice->startCapture() != CameraStatus::SUCCESS)
