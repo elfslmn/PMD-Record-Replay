@@ -215,12 +215,12 @@ int main (int argc, char *argv[])
     		if(listener.isRecording) 
     		{
     			listener.stopRecord();
-				ofstream file;
-			 	file.open (folder+"/Specs.txt");
-			  	file << "Exposure time: " ;
-			  	if(result.count("e")) file << result["e"].as<int>() << endl;
-			  	else file << "Auto" << endl;
-			  	file.close();
+    			cv::FileStorage fs(folder+"/Specs", cv::FileStorage::WRITE);
+			  	if(result.count("e")) fs << "Exposure time" << result["e"].as<int>();
+			  	else fs << "Exposure time" << "Auto" ;
+			  	fs << "cameraMatrix" << listener.cameraMatrix;
+			  	fs << "distortionCoefficients" << listener.distortionCoefficients;
+			  	fs.release();
     		}
     		else
     		{
