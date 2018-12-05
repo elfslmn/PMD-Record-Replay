@@ -32,7 +32,7 @@ void CamListener::setLensParameters (LensParameters lensParameters)
     // (fx   0    cx)
     // (0    fy   cy)
     // (0    0    1 )
-    cameraMatrix = (Mat1d (3, 3) << lensParameters.focalLength.first, 0, lensParameters.principalPoint.first,
+    cameraMatrix = (Mat1f (3, 3) << lensParameters.focalLength.first, 0, lensParameters.principalPoint.first,
             0, lensParameters.focalLength.second, lensParameters.principalPoint.second,
             0, 0, 1);
     /*LOGI("Camera params fx fy cx cy: %f,%f,%f,%f", lensParameters.focalLength.first, lensParameters.focalLength.second,
@@ -40,7 +40,7 @@ void CamListener::setLensParameters (LensParameters lensParameters)
 
     // Construct the distortion coefficients
     // k1 k2 p1 p2 k3
-    distortionCoefficients = (Mat1d (1, 5) << lensParameters.distortionRadial[0],
+    distortionCoefficients = (Mat1f (1, 5) << lensParameters.distortionRadial[0],
             lensParameters.distortionRadial[1],
             lensParameters.distortionTangential.first,
             lensParameters.distortionTangential.second,

@@ -28,6 +28,7 @@ public:
     Mat xyzMap, confMap;
     Mat grayImage;
     Mat depthImage8, grayImage8;
+    Mat cameraMatrix, distortionCoefficients;
     
     bool isRecording = false;
 
@@ -41,9 +42,6 @@ private:
     
     // Private variables
     uint16_t cam_width, cam_height;
-
-    Mat cameraMatrix, distortionCoefficients;
-
     mutex flagMutex;
     
     int frame = 0;
